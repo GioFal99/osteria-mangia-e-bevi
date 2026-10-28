@@ -198,24 +198,22 @@
 </div>
 
 <script>
-  // Mobile Navigation
+  // Mobile navigation
   const menuToggle = document.getElementById("menu-toggle");
   const mainNav = document.getElementById("main-nav");
 
   if (menuToggle && mainNav) {
-    menuToggle.addEventListener("click", () => {
-      const open = mainNav.classList.toggle("is-open");
-      menuToggle.setAttribute("aria-expanded", String(open));
-      menuToggle.setAttribute(
-        "aria-label",
-        open ? "Menü schließen" : "Menü öffnen"
-      );
+    menuToggle.addEventListener("click", function () {
+      const isOpen = mainNav.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute("aria-label", isOpen ? "Menü schließen" : "Menü öffnen");
     });
 
-    mainNav.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
+    mainNav.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
         mainNav.classList.remove("is-open");
         menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Menü öffnen");
       });
     });
   }
@@ -223,40 +221,41 @@
   const year = document.getElementById("current-year");
   if (year) year.textContent = new Date().getFullYear();
 
-  // Dynamic public gallery
+  // Dynamische Galerie: liest alle Bilddateien aus dem öffentlichen GitHub-Ordner images
   const gallery = document.getElementById("gallery-grid");
   const status = document.getElementById("gallery-status");
   const lightbox = document.getElementById("gallery-lightbox");
   const lightboxImage = document.getElementById("lightbox-image");
   const lightboxClose = document.getElementById("lightbox-close");
+  const githubImagesApi = "https://api.github.com/repos/giofal99/osteria-mangia-e-bevi/contents/images?ref=main";
+  const imageExtensions = /\.(jpe?g|png|webp|gif|avif|bmp)$/i;
 
   function closeLightbox() {
+    if (!lightbox || !lightboxImage) return;
     lightbox.classList.remove("is-open");
     lightboxImage.src = "";
   }
 
-  lightboxClose.addEventListener("click", closeLightbox);
-
-  lightbox.addEventListener("click", event => {
-    if (event.target === lightbox) closeLightbox();
-  });
-
-  document.addEventListener("keydown", event => {
+  if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
+  if (lightbox) {
+    lightbox.addEventListener("click", function (event) {
+      if (event.target === lightbox) closeLightbox();
+    });
+  }
+  document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") closeLightbox();
   });
 
-  function showImage(src) {
+  function showImage(src, name) {
     const figure = document.createElement("figure");
     figure.className = "gallery-item";
 
     const img = document.createElement("img");
     img.src = src;
-    img.alt = src.split("/").pop()
-      .replace(/\.[^.]+$/, "")
-      .replace(/[-_]/g, " ");
+    img.alt = name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
     img.loading = "lazy";
-
-    img.addEventListener("click", () => {
+    img.decoding = "async";
+    img.addEventListener("click", function () {
       lightboxImage.src = img.src;
       lightboxImage.alt = img.alt;
       lightbox.classList.add("is-open");
@@ -267,34 +266,46 @@
   }
 
   async function loadGallery() {
+    if (!gallery) return;
     try {
-      const response = await fetch("gallery-images.json", {
-        cache: "no-store"
+      const response = await fetch(githubImagesApi, {
+        cache: "no-store",
+        headers: { "Accept": "application/vnd.github+json" }
       });
-
       if (!response.ok) {
-        throw new Error("Elenco immagini non disponibile");
+        throw new Error("GitHub API: " + response.status + " " + response.statusText);
       }
+      const files = await response.json();
+      if (!Array.isArray(files)) throw new Error("GitHub hat keine Dateiliste zurückgegeben.");
 
-      const images = await response.json();
-
-      if (!Array.isArray(images)) {
-        throw new Error("Formato elenco non valido");
-      }
+      const images = files
+        .filter(function (file) {
+          return file.type === "file" && imageExtensions.test(file.name);
+        })
+        .sort(function (a, b) {
+          return a.name.localeCompare(b.name, "de", { numeric: true, sensitivity: "base" });
+        });
 
       gallery.replaceChildren();
-
       if (images.length === 0) {
-        status.textContent = "Zurzeit sind keine Fotos vorhanden.";
-        gallery.appendChild(status);
+        if (status) {
+          status.textContent = "Zurzeit sind keine Fotos vorhanden.";
+          gallery.appendChild(status);
+        }
         return;
       }
 
-      images.forEach(showImage);
+      images.forEach(function (file) {
+        // URL del file dal repository pubblico; non serve aggiornare gallery-images.json
+        showImage(file.download_url || ("images/" + encodeURIComponent(file.name)), file.name);
+      });
     } catch (error) {
-      console.error(error);
-      status.textContent =
-        "Die Galerie konnte nicht geladen werden. Bitte später erneut versuchen.";
+      console.error("Fehler beim Laden der Galerie:", error);
+      gallery.replaceChildren();
+      if (status) {
+        status.textContent = "Die Galerie konnte nicht geladen werden. Bitte später erneut versuchen.";
+        gallery.appendChild(status);
+      }
     }
   }
 
@@ -337,151 +348,7 @@
     <p class="footer-copy">© <span id="current-year">2026</span> Osteria Mangia e Bevi</p>
   </footer>
 
-  <script>
-    // Mobile navigation
-    const menuToggle = document.getElementById("menu-toggle");
-    const mainNav = document.getElementById("main-nav");
-
-    if (menuToggle && mainNav) {
-      menuToggle.addEventListener("click", function () {
-        const isOpen = mainNav.classList.toggle("is-open");
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
-        menuToggle.setAttribute(
-          "aria-label",
-          isOpen ? "Menü schließen" : "Menü öffnen"
-        );
-      });
-
-      mainNav.querySelectorAll("a").forEach(function (link) {
-        link.addEventListener("click", function () {
-          mainNav.classList.remove("is-open");
-          menuToggle.setAttribute("aria-expanded", "false");
-          menuToggle.setAttribute("aria-label", "Menü öffnen");
-        });
-      });
-    }
-
-    document.getElementById("current-year").textContent =
-      new Date().getFullYear();
-
-    // Dynamic gallery: browser folder access
-    const chooseFolderButton =
-      document.getElementById("choose-gallery-folder");
-    const galleryGrid = document.getElementById("gallery-grid");
-    const galleryStatus = document.getElementById("gallery-status");
-    const lightbox = document.getElementById("gallery-lightbox");
-    const lightboxImage = document.getElementById("lightbox-image");
-    const lightboxClose = document.getElementById("lightbox-close");
-
-    let currentObjectUrls = [];
-
-    const imageExtensions = /\.(jpe?g|png|webp|gif|avif|bmp)$/i;
-
-    function openLightbox(src, alt) {
-      lightboxImage.src = src;
-      lightboxImage.alt = alt;
-      lightbox.classList.add("is-open");
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove("is-open");
-      lightboxImage.src = "";
-    }
-
-    lightboxClose.addEventListener("click", closeLightbox);
-
-    lightbox.addEventListener("click", function (event) {
-      if (event.target === lightbox) closeLightbox();
-    });
-
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") closeLightbox();
-    });
-
-    function showGalleryImage(src, name) {
-      const figure = document.createElement("figure");
-      figure.className = "gallery-item";
-
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
-      img.loading = "lazy";
-      img.addEventListener("click", function () {
-        openLightbox(src, img.alt);
-      });
-
-      figure.appendChild(img);
-      galleryGrid.appendChild(figure);
-    }
-
-    // Enable zoom for the three default gallery photos
-    galleryGrid.querySelectorAll("img").forEach(function (img) {
-      img.addEventListener("click", function () {
-        openLightbox(img.src, img.alt);
-      });
-    });
-
-    chooseFolderButton.addEventListener("click", async function () {
-      if (!("showDirectoryPicker" in window)) {
-        galleryStatus.textContent =
-          "Dieser Browser unterstützt die Ordnerauswahl nicht. Bitte verwenden Sie eine aktuelle Version von Chrome oder Edge.";
-        return;
-      }
-
-      try {
-        const folder = await window.showDirectoryPicker({
-          mode: "read"
-        });
-
-        const files = [];
-
-        for await (const entry of folder.values()) {
-          if (entry.kind === "file" && imageExtensions.test(entry.name)) {
-            files.push(entry);
-          }
-        }
-
-        files.sort(function (a, b) {
-          return a.name.localeCompare(b.name, "de", {
-            numeric: true,
-            sensitivity: "base"
-          });
-        });
-
-        if (files.length === 0) {
-          galleryStatus.textContent =
-            "Keine unterstützten Bilddateien in diesem Ordner gefunden.";
-          return;
-        }
-
-        // Release URLs created during the previous selection
-        currentObjectUrls.forEach(function (url) {
-          URL.revokeObjectURL(url);
-        });
-        currentObjectUrls = [];
-
-        // Clear the previous gallery
-        galleryGrid.replaceChildren();
-
-        for (const entry of files) {
-          const file = await entry.getFile();
-          const url = URL.createObjectURL(file);
-
-          currentObjectUrls.push(url);
-          showGalleryImage(url, entry.name);
-        }
-
-        galleryStatus.textContent =
-          files.length + " Fotos geladen. Ordner: " + folder.name + ".";
-      } catch (error) {
-        if (error.name === "AbortError") return;
-
-        galleryStatus.textContent =
-          "Die Fotos konnten nicht geladen werden. Bitte versuchen Sie es erneut.";
-        console.error(error);
-      }
-    });
-  </script>
+  
 
 </body>
 </html>
