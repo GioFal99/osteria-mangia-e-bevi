@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#18251e">
+  <meta name="description" content="Osteria Mangia e Bevi in Bottrop – italienische Küche, mediterrane Spezialitäten und herzliche Gastfreundschaft.">
+  <title>Osteria Mangia e Bevi | Bottrop</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .gallery-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 24px;
+    }
+
+    .gallery-folder-button {
+      display: inline-block;
+      padding: 12px 18px;
+      border: 1px solid #c5a46d;
+      color: #18251e;
+      background: #c5a46d;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .gallery-folder-button:hover {
+      background: #e0c99c;
+    }
+
+    .gallery-status {
+      color: #777a72;
+      font-size: 12px;
+    }
+
+    .gallery-item img {
+      cursor: zoom-in;
+    }
+
+    .gallery-lightbox {
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+      background: rgba(10, 15, 11, 0.94);
+    }
+
+    .gallery-lightbox.is-open {
+      display: flex;
+    }
+
+    .gallery-lightbox img {
+      width: auto;
+      max-width: 92vw;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+
+    .gallery-lightbox-close {
+      position: absolute;
+      top: 15px;
+      right: 22px;
+      padding: 5px 12px;
+      border: 1px solid #c5a46d;
+      color: white;
+      background: transparent;
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 700px) {
+      .gallery-tools {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#start" aria-label="Osteria Mangia e Bevi">
+        <span class="brand-small">RISTORANTE ITALIANO</span>
+        <span class="brand-name">Osteria <em>Mangia e Bevi</em></span>
+        <span class="brand-location">BOTTROP</span>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" type="button"
+        aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="main-nav" aria-label="Hauptnavigation">
+        <a href="#start">Startseite</a>
+        <a href="#osteria">Über uns</a>
+        <a href="#speisekarte">Speisekarte</a>
+        <a href="#galerie">Galerie</a>
+        <a href="#kontakt" class="nav-contact">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="start">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="eyebrow">Benvenuti nella nostra Osteria</p>
+        <h1>Ein Stück <em>Italien</em><br>in Bottrop</h1>
+        <p class="hero-description">
+          Italienische Küche, mediterrane Leidenschaft und
+          Genussmomente, die in Erinnerung bleiben.
+        </p>
+        <div class="hero-actions">
+          <a href="#speisekarte" class="button button-primary">Unsere Speisekarte</a>
+          <a href="#kontakt" class="button button-outline">Kontakt &amp; Anfahrt</a>
+        </div>
+      </div>
+      <div class="hero-bottom">
+        <span>GUT ESSEN. GUT LEBEN.</span>
+        <span>LA DOLCE VITA</span>
+      </div>
+    </section>
+
+    <section class="intro section-wrap" id="osteria">
+      <div class="intro-image image-frame">
+        <img src="images/grill1.jpg"
+          alt="Mediterrane Küche der Osteria Mangia e Bevi" loading="lazy">
+      </div>
+      <div class="intro-content">
+        <p class="eyebrow eyebrow-dark">Benvenuti a tavola</p>
+        <h2>Italienischer Genuss.<br><em>Mit Herz serviert.</em></h2>
+        <div class="small-divider"></div>
+        <p>
+          Gutes Essen bringt Menschen zusammen. In unserer Osteria
+          stehen italienische Gastfreundschaft, mediterrane Aromen
+          und die Freude am gemeinsamen Genießen im Mittelpunkt.
+        </p>
+        <p>
+          Ob ein gemütliches Essen zu zweit, ein Abend mit Freunden
+          oder ein besonderer Anlass – wir freuen uns darauf,
+          Sie bei uns willkommen zu heißen.
+        </p>
+        <a href="#kontakt" class="text-link">Wir freuen uns auf Sie <span>↗</span></a>
+      </div>
+    </section>
+
+    <section class="menu-teaser section-wrap" id="speisekarte">
+      <div class="menu-image">
+        <img src="images/pasta1.jpg" alt="Italienische Pasta" loading="lazy">
+      </div>
+      <div class="menu-content">
+        <p class="eyebrow">Sapori d'Italia</p>
+        <h2>Einfach gut.<br><em>Einfach italienisch.</em></h2>
+        <p>
+          Mediterrane Klassiker und italienische Lieblingsgerichte
+          laden dazu ein, den Alltag für einen Moment zu vergessen.
+          Entdecken Sie unsere Küche und genießen Sie Italien
+          mit allen Sinnen.
+        </p>
+        <a href="#kontakt" class="button button-primary">
+          Fragen Sie nach unserer Speisekarte
+        </a>
+      </div>
+    </section>
+
+    <section class="gallery section-wrap" id="galerie">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow eyebrow-dark">Piccoli momenti</p>
+      <h2>Einblicke in unsere <em>Osteria</em></h2>
+    </div>
+    <p>Ein Vorgeschmack auf Genuss und Atmosphäre.</p>
+  </div>
+
+  <div class="gallery-grid" id="gallery-grid">
+    <p id="gallery-status">Fotos werden geladen ...</p>
+  </div>
+
+  <p class="photo-disclaimer">
+    Fotografien: Eigentum von Franco Argese.
+  </p>
+</section>
+
+<div class="gallery-lightbox" id="gallery-lightbox"
+  role="dialog" aria-modal="true" aria-label="Foto vergrößert">
+  <button class="gallery-lightbox-close" id="lightbox-close"
+    type="button" aria-label="Foto schließen">×</button>
+  <img id="lightbox-image" src="" alt="">
+</div>
+
+<script>
+  // Mobile Navigation
+  const menuToggle = document.getElementById("menu-toggle");
+  const mainNav = document.getElementById("main-nav");
+
+  if (menuToggle && mainNav) {
+    menuToggle.addEventListener("click", () => {
+      const open = mainNav.classList.toggle("is-open");
+      menuToggle.setAttribute("aria-expanded", String(open));
+      menuToggle.setAttribute(
+        "aria-label",
+        open ? "Menü schließen" : "Menü öffnen"
+      );
+    });
+
+    mainNav.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        mainNav.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+  const year = document.getElementById("current-year");
+  if (year) year.textContent = new Date().getFullYear();
+
+  // Dynamic public gallery
+  const gallery = document.getElementById("gallery-grid");
+  const status = document.getElementById("gallery-status");
+  const lightbox = document.getElementById("gallery-lightbox");
+  const lightboxImage = document.getElementById("lightbox-image");
+  const lightboxClose = document.getElementById("lightbox-close");
+
+  function closeLightbox() {
+    lightbox.classList.remove("is-open");
+    lightboxImage.src = "";
+  }
+
+  lightboxClose.addEventListener("click", closeLightbox);
+
+  lightbox.addEventListener("click", event => {
+    if (event.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeLightbox();
+  });
+
+  function showImage(src) {
+    const figure = document.createElement("figure");
+    figure.className = "gallery-item";
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = src.split("/").pop()
+      .replace(/\.[^.]+$/, "")
+      .replace(/[-_]/g, " ");
+    img.loading = "lazy";
+
+    img.addEventListener("click", () => {
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt;
+      lightbox.classList.add("is-open");
+    });
+
+    figure.appendChild(img);
+    gallery.appendChild(figure);
+  }
+
+  async function loadGallery() {
+    try {
+      const response = await fetch("gallery-images.json", {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("Elenco immagini non disponibile");
+      }
+
+      const images = await response.json();
+
+      if (!Array.isArray(images)) {
+        throw new Error("Formato elenco non valido");
+      }
+
+      gallery.replaceChildren();
+
+      if (images.length === 0) {
+        status.textContent = "Zurzeit sind keine Fotos vorhanden.";
+        gallery.appendChild(status);
+        return;
+      }
+
+      images.forEach(showImage);
+    } catch (error) {
+      console.error(error);
+      status.textContent =
+        "Die Galerie konnte nicht geladen werden. Bitte später erneut versuchen.";
+    }
+  }
+
+  loadGallery();
+</script>
+
+    <section class="contact-section" id="kontakt">
+      <div class="contact-inner">
+        <p class="eyebrow">Ci farebbe piacere vedervi</p>
+        <h2>Ihr Tisch in <em>Italien</em></h2>
+        <p>
+          Sie möchten uns besuchen oder haben eine Frage?
+          Wir freuen uns, von Ihnen zu hören.
+        </p>
+
+        <div class="contact-details">
+          <div class="contact-item">
+            <span class="contact-label">ADRESSE</span>
+            <p>Osteria Mangia e Bevi<br>Bottrop, Deutschland</p>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">RESERVIERUNG &amp; FRAGEN</span>
+            <p>Bitte kontaktieren Sie uns über unsere Facebook-Seite.</p>
+            <a class="text-link"
+              href="https://www.facebook.com/profile.php?id=100063520782452"
+              target="_blank" rel="noopener noreferrer">Facebook öffnen ↗</a>
+          </div>
+        </div>
+
+        <a class="button button-primary"
+          href="https://www.facebook.com/profile.php?id=100063520782452"
+          target="_blank" rel="noopener noreferrer">Kontakt aufnehmen</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="footer-brand" href="#start">Osteria <em>Mangia e Bevi</em></a>
+    <p>Italienischer Genuss in Bottrop</p>
+    <p class="footer-copy">© <span id="current-year">2026</span> Osteria Mangia e Bevi</p>
+  </footer>
+
+  <div class="gallery-lightbox" id="gallery-lightbox"
+    role="dialog" aria-modal="true" aria-label="Foto vergrößert">
+    <button class="gallery-lightbox-close" id="lightbox-close"
+      type="button" aria-label="Foto schließen">×</button>
+    <img id="lightbox-image" src="" alt="">
+  </div>
+
+  <script>
+    // Mobile navigation
+    const menuToggle = document.getElementById("menu-toggle");
+    const mainNav = document.getElementById("main-nav");
+
+    if (menuToggle && mainNav) {
+      menuToggle.addEventListener("click", function () {
+        const isOpen = mainNav.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute(
+          "aria-label",
+          isOpen ? "Menü schließen" : "Menü öffnen"
+        );
+      });
+
+      mainNav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          mainNav.classList.remove("is-open");
+          menuToggle.setAttribute("aria-expanded", "false");
+          menuToggle.setAttribute("aria-label", "Menü öffnen");
+        });
+      });
+    }
+
+    document.getElementById("current-year").textContent =
+      new Date().getFullYear();
+
+    // Dynamic gallery: browser folder access
+    const chooseFolderButton =
+      document.getElementById("choose-gallery-folder");
+    const galleryGrid = document.getElementById("gallery-grid");
+    const galleryStatus = document.getElementById("gallery-status");
+    const lightbox = document.getElementById("gallery-lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+    const lightboxClose = document.getElementById("lightbox-close");
+
+    let currentObjectUrls = [];
+
+    const imageExtensions = /\.(jpe?g|png|webp|gif|avif|bmp)$/i;
+
+    function openLightbox(src, alt) {
+      lightboxImage.src = src;
+      lightboxImage.alt = alt;
+      lightbox.classList.add("is-open");
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("is-open");
+      lightboxImage.src = "";
+    }
+
+    lightboxClose.addEventListener("click", closeLightbox);
+
+    lightbox.addEventListener("click", function (event) {
+      if (event.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeLightbox();
+    });
+
+    function showGalleryImage(src, name) {
+      const figure = document.createElement("figure");
+      figure.className = "gallery-item";
+
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
+      img.loading = "lazy";
+      img.addEventListener("click", function () {
+        openLightbox(src, img.alt);
+      });
+
+      figure.appendChild(img);
+      galleryGrid.appendChild(figure);
+    }
+
+    // Enable zoom for the three default gallery photos
+    galleryGrid.querySelectorAll("img").forEach(function (img) {
+      img.addEventListener("click", function () {
+        openLightbox(img.src, img.alt);
+      });
+    });
+
+    chooseFolderButton.addEventListener("click", async function () {
+      if (!("showDirectoryPicker" in window)) {
+        galleryStatus.textContent =
+          "Dieser Browser unterstützt die Ordnerauswahl nicht. Bitte verwenden Sie eine aktuelle Version von Chrome oder Edge.";
+        return;
+      }
+
+      try {
+        const folder = await window.showDirectoryPicker({
+          mode: "read"
+        });
+
+        const files = [];
+
+        for await (const entry of folder.values()) {
+          if (entry.kind === "file" && imageExtensions.test(entry.name)) {
+            files.push(entry);
+          }
+        }
+
+        files.sort(function (a, b) {
+          return a.name.localeCompare(b.name, "de", {
+            numeric: true,
+            sensitivity: "base"
+          });
+        });
+
+        if (files.length === 0) {
+          galleryStatus.textContent =
+            "Keine unterstützten Bilddateien in diesem Ordner gefunden.";
+          return;
+        }
+
+        // Release URLs created during the previous selection
+        currentObjectUrls.forEach(function (url) {
+          URL.revokeObjectURL(url);
+        });
+        currentObjectUrls = [];
+
+        // Clear the previous gallery
+        galleryGrid.replaceChildren();
+
+        for (const entry of files) {
+          const file = await entry.getFile();
+          const url = URL.createObjectURL(file);
+
+          currentObjectUrls.push(url);
+          showGalleryImage(url, entry.name);
+        }
+
+        galleryStatus.textContent =
+          files.length + " Fotos geladen. Ordner: " + folder.name + ".";
+      } catch (error) {
+        if (error.name === "AbortError") return;
+
+        galleryStatus.textContent =
+          "Die Fotos konnten nicht geladen werden. Bitte versuchen Sie es erneut.";
+        console.error(error);
+      }
+    });
+  </script>
+
+</body>
+</html>
