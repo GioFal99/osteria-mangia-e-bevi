@@ -1,5 +1,4 @@
- 
-/* ========================================
+ /* ========================================
    OSTERIA MANGIA E BEVI — STYLESHEET
    Elegant Italian restaurant design
    ======================================== */
@@ -196,7 +195,7 @@ button {
       rgba(13, 24, 18, 0.76) 48%,
       rgba(13, 24, 18, 0.45) 100%
     ),
-    url("images/grill1.jpg") center 55% / cover no-repeat,
+    url("images/franco1.jpg") center 55% / cover no-repeat,
     var(--green);
 }
 
