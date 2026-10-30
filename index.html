@@ -8,80 +8,6 @@
   <title>Osteria Mangia e Bevi | Bottrop</title>
   <link rel="stylesheet" href="styles.css">
 
-  <style>
-    .gallery-tools {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 24px;
-    }
-
-    .gallery-folder-button {
-      display: inline-block;
-      padding: 12px 18px;
-      border: 1px solid #c5a46d;
-      color: #18251e;
-      background: #c5a46d;
-      font: inherit;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .gallery-folder-button:hover {
-      background: #e0c99c;
-    }
-
-    .gallery-status {
-      color: #777a72;
-      font-size: 12px;
-    }
-
-    .gallery-item img {
-      cursor: zoom-in;
-    }
-
-    .gallery-lightbox {
-      position: fixed;
-      z-index: 9999;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 25px;
-      background: rgba(10, 15, 11, 0.94);
-    }
-
-    .gallery-lightbox.is-open {
-      display: flex;
-    }
-
-    .gallery-lightbox img {
-      width: auto;
-      max-width: 92vw;
-      max-height: 85vh;
-      object-fit: contain;
-    }
-
-    .gallery-lightbox-close {
-      position: absolute;
-      top: 15px;
-      right: 22px;
-      padding: 5px 12px;
-      border: 1px solid #c5a46d;
-      color: white;
-      background: transparent;
-      font-size: 28px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 700px) {
-      .gallery-tools {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-  </style>
 </head>
 
 <body>
@@ -197,120 +123,6 @@
   <img id="lightbox-image" src="" alt="">
 </div>
 
-<script>
-  // Mobile navigation
-  const menuToggle = document.getElementById("menu-toggle");
-  const mainNav = document.getElementById("main-nav");
-
-  if (menuToggle && mainNav) {
-    menuToggle.addEventListener("click", function () {
-      const isOpen = mainNav.classList.toggle("is-open");
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-      menuToggle.setAttribute("aria-label", isOpen ? "Menü schließen" : "Menü öffnen");
-    });
-
-    mainNav.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        mainNav.classList.remove("is-open");
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Menü öffnen");
-      });
-    });
-  }
-
-  const year = document.getElementById("current-year");
-  if (year) year.textContent = new Date().getFullYear();
-
-  // Dynamische Galerie: liest alle Bilddateien aus dem öffentlichen GitHub-Ordner images
-  const gallery = document.getElementById("gallery-grid");
-  const status = document.getElementById("gallery-status");
-  const lightbox = document.getElementById("gallery-lightbox");
-  const lightboxImage = document.getElementById("lightbox-image");
-  const lightboxClose = document.getElementById("lightbox-close");
-  const githubImagesApi = "https://api.github.com/repos/giofal99/osteria-mangia-e-bevi/contents/images?ref=main";
-  const imageExtensions = /\.(jpe?g|png|webp|gif|avif|bmp)$/i;
-
-  function closeLightbox() {
-    if (!lightbox || !lightboxImage) return;
-    lightbox.classList.remove("is-open");
-    lightboxImage.src = "";
-  }
-
-  if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
-  if (lightbox) {
-    lightbox.addEventListener("click", function (event) {
-      if (event.target === lightbox) closeLightbox();
-    });
-  }
-  document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") closeLightbox();
-  });
-
-  function showImage(src, name) {
-    const figure = document.createElement("figure");
-    figure.className = "gallery-item";
-
-    const img = document.createElement("img");
-    img.src = src;
-    img.alt = name.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ");
-    img.loading = "lazy";
-    img.decoding = "async";
-    img.addEventListener("click", function () {
-      lightboxImage.src = img.src;
-      lightboxImage.alt = img.alt;
-      lightbox.classList.add("is-open");
-    });
-
-    figure.appendChild(img);
-    gallery.appendChild(figure);
-  }
-
-  async function loadGallery() {
-    if (!gallery) return;
-    try {
-      const response = await fetch(githubImagesApi, {
-        cache: "no-store",
-        headers: { "Accept": "application/vnd.github+json" }
-      });
-      if (!response.ok) {
-        throw new Error("GitHub API: " + response.status + " " + response.statusText);
-      }
-      const files = await response.json();
-      if (!Array.isArray(files)) throw new Error("GitHub hat keine Dateiliste zurückgegeben.");
-
-      const images = files
-        .filter(function (file) {
-          return file.type === "file" && imageExtensions.test(file.name);
-        })
-        .sort(function (a, b) {
-          return a.name.localeCompare(b.name, "de", { numeric: true, sensitivity: "base" });
-        });
-
-      gallery.replaceChildren();
-      if (images.length === 0) {
-        if (status) {
-          status.textContent = "Zurzeit sind keine Fotos vorhanden.";
-          gallery.appendChild(status);
-        }
-        return;
-      }
-
-      images.forEach(function (file) {
-        // URL del file dal repository pubblico; non serve aggiornare gallery-images.json
-        showImage(file.download_url || ("images/" + encodeURIComponent(file.name)), file.name);
-      });
-    } catch (error) {
-      console.error("Fehler beim Laden der Galerie:", error);
-      gallery.replaceChildren();
-      if (status) {
-        status.textContent = "Die Galerie konnte nicht geladen werden. Bitte später erneut versuchen.";
-        gallery.appendChild(status);
-      }
-    }
-  }
-
-  loadGallery();
-</script>
 
     <section class="contact-section" id="kontakt">
       <div class="contact-inner">
@@ -347,10 +159,10 @@
   <footer class="site-footer">
     <a class="footer-brand" href="#start">Osteria <em>Mangia e Bevi</em></a>
     <p>Italienischer Genuss in Bottrop</p>
+    <a class="admin-entry" href="admin.html">Inhaberbereich</a>
     <p class="footer-copy">© <span id="current-year">2026</span> Osteria Mangia e Bevi</p>
   </footer>
 
-  
-
+  <script src="script.js" defer></script>
 </body>
 </html>

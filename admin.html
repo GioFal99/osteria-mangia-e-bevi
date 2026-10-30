@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#18251e">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Inhaberbereich | Osteria Mangia e Bevi</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="admin.js" defer></script>
+</head>
+<body class="admin-page">
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <a class="footer-brand" href="index.html">Osteria <em>Mangia e Bevi</em></a>
+      <a class="admin-back" href="index.html">← Zur Website</a>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <p class="admin-kicker">Nur für Inhaber</p>
+    <h1>Fotoverwaltung</h1>
+    <p class="admin-lead">Bilder für die Galerie hochladen, austauschen und entfernen.</p>
+
+    <div id="admin-status" class="admin-status" role="status" aria-live="polite">
+      Verbindung zum Verwaltungsserver wird geprüft …
+    </div>
+
+    <section id="login-panel" class="admin-card" hidden>
+      <h2>Anmelden</h2>
+      <form id="login-form" class="admin-form" autocomplete="on">
+        <label class="admin-field">Benutzername
+          <input id="username" name="username" type="text" autocomplete="username" required>
+        </label>
+        <label class="admin-field">Passwort
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="admin-button" type="submit">Sicher anmelden</button>
+      </form>
+      <p class="admin-hint">Zugangsdaten werden vom Server geprüft. Sie sind nicht in dieser Website gespeichert.</p>
+    </section>
+
+    <section id="photos-panel" class="admin-card" hidden>
+      <div class="admin-toolbar" style="justify-content:space-between">
+        <h2 style="margin:0">Galeriefotos</h2>
+        <button id="logout-button" class="admin-button admin-button-secondary" type="button">Abmelden</button>
+      </div>
+      <form id="upload-form" class="admin-form">
+        <label class="admin-field">Neue Fotos auswählen (maximal 9 auf einmal)
+          <input id="photo-files" name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+        </label>
+        <p id="selection-info" class="admin-hint">Erlaubt: JPG, PNG und WebP. Die Servergröße wird zusätzlich geprüft.</p>
+        <button id="upload-button" class="admin-button" type="submit">Ausgewählte Fotos hochladen</button>
+      </form>
+      <div id="photo-grid" class="admin-photo-grid"></div>
+    </section>
+
+    <section id="unavailable-panel" class="admin-card" hidden>
+      <h2>Verwaltung noch nicht aktiviert</h2>
+      <p>Diese Verwaltungsseite ist vorbereitet, aber der geschützte Server auf dem Raspberry Pi ist noch nicht verbunden. Auf GitHub Pages können Fotos nicht sicher hochgeladen oder gelöscht werden.</p>
+      <p class="admin-hint">Sobald der Raspberry Pi mit dem Verwaltungs-Backend läuft, funktionieren Anmeldung, Upload und Löschen über diese Seite. Bitte keine Passwörter in GitHub oder in diese HTML-Datei eintragen.</p>
+    </section>
+  </main>
+
+  <footer class="admin-footer">Osteria Mangia e Bevi · Bottrop</footer>
+</body>
+</html>
